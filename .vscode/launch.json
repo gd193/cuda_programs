@@ -1,0 +1,58 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Debug CUDA with cuda-gdb",
+            "type": "cppdbg", // Use the C++ debugger extension
+            "request": "launch", // Launch the program
+            "program": "${workspaceFolder}/basic/basic", // Path to the executable (matches tasks.json output)
+            "args": [], // Command line arguments for your program (if any)
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}", // Current working directory for the debugger
+            "environment": [
+                // Add your CUDA library path here to resolve libcurand.so error
+                // Replace "/path/to/your/cuda/lib64" with the actual path on your system
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/system/apps/mlsoft/CUDA-12.3.2/lib64:${env:LD_LIBRARY_PATH}"
+                }
+            ],
+            "externalConsole": false, // Set to true to use an external console window
+            "MIMode": "gdb", // Specify gdb as the debugger
+            // Set the path to your cuda-gdb executable
+            // You might need to adjust this path based on your CUDA installation
+            "miDebuggerPath": "${config:cuda-gdb}",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            // This task will run before debugging to ensure the executable is built
+            "preLaunchTask": "Build CUDA"
+        },
+        {
+            "name": "WoS 2d: Debug CUDA with cuda-gdb",
+            "type": "cuda-gdb", // Use the CUDA debugger extension
+            "request": "launch", // Launch the program
+            // "gdb": "cuda-gdb", // Specify the debugger to use
+            "debuggerPath": "${config:cuda-gdb}", // Path to the cuda-gdb executable
+            "program": "${workspaceFolder}/simple_2d_WoS/simple_2d_WoS", // Path to the executable (matches tasks.json output)
+            "args": [], // Command line arguments for your program (if any)
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}", // Current working directory for the debugger
+            "environment": [
+                // Add your CUDA library path here to resolve libcurand.so error
+                // Replace "/path/to/your/cuda/lib64" with the actual path on your system
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/system/apps/mlsoft/CUDA-12.3.2/lib64:${env:LD_LIBRARY_PATH}"
+                }
+            ],
+            // This task will run before debugging to ensure the executable is built
+            "preLaunchTask": "Build CUDA"
+        }
+    ]
+}

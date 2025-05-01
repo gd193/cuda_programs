@@ -1,0 +1,45 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build CUDA",
+            "type": "shell",
+            "command": "${config:nvcc}", // Use the nvcc command from the configuration
+            "args": [
+                "${workspaceFolder}/${relativeFileDirname}/${fileBasename}", // Compile the currently open file
+                "-o",      // Output flag
+                "${workspaceFolder}/${relativeFileDirname}/${fileBasenameNoExtension}", // Output executable in the same directory with the same name as the source file (without extension)
+                "-lcurand", // Link the CURAND library
+                "-g",       // Generate debug information for cuda-gdb
+                "-G"        // Enable debug symbols for device code (important for cuda-gdb)
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true // Set this as the default build task
+            },
+            "presentation": {
+                "reveal": "always", // Show the terminal output
+                "panel": "new"      // Use a new terminal panel
+            },
+            "problemMatcher": [
+                "$nvcc" // Use the NVCC problem matcher for error highlighting
+            ],
+            "detail": "Builds the CUDA file using nvcc for debugging."
+        },
+        {
+            "label": "Debug CUDA (cuda-gdb)",
+            "type": "shell",
+            "command": "${config:cuda-gdb}", // Use the cuda-gdb command from the configuration
+            "args": [
+                "${workspaceFolder}/${relativeFileDirname}/${fileBasenameNoExtension}" // Path to the executable
+            ],
+            "group": "test", // You can assign this to a debug group if you prefer
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [], // No specific problem matcher for gdb output in this simple case
+            "detail": "Launches cuda-gdb to debug the compiled CUDA executable."
+        }
+    ]
+}
